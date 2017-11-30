@@ -96,3 +96,16 @@ Test trades by placing purchases at the machine and ensure fiat is converted int
   <a href="https://support.lamassu.is/hc/en-us/articles/115002093145-Lamassu-server-commands">Lamassu server commands</a>
 </li>
 </h5>
+
+-------
+
+# TODO
+
+- Research implementation for cloud infrastructure
+- Kubernetes or Docker
+- Simplify setup process
+- Security and penetration testing
+- Automate server configuration
+- Documentation updates and fix broken links
+- Process improvement for user experience
+- Engineering team call
