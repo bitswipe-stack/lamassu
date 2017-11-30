@@ -1,0 +1,26 @@
+{
+  "name": "lamassu-kraken",
+  "version": "1.1.0",
+  "description": "lamassu-server plugin for the Kraken exchange",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lamassu/lamassu-kraken.git"
+  },
+  "author": "Josh Harvey <josh@lamassu.is> (https://lamassu.is/)",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/lamassu/lamassu-kraken/issues"
+  },
+  "homepage": "https://github.com/lamassu/lamassu-kraken",
+  "dependencies": {
+    "axios": "^0.16.0",
+    "bignumber.js": "^4.0.0",
+    "kraken-api": "^0.1.7",
+    "lamassu-config": "^0.4.4",
+    "lodash": "^4.8.1"
+  }
+}

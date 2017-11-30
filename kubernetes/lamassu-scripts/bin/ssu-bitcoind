@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -e
+
+if [ "$(whoami)" != "root" ]; then
+  echo -e "This script has to be run as \033[1mroot\033[0m user"
+  exit 3
+fi
+
+export LOG_FILE=/tmp/install.log
+
+BACKUP_DIR=$HOME/backups/bitcoind
+mkdir -p $BACKUP_DIR
+
+ufw allow 8333/tcp >> $LOG_FILE 2>&1
+
+CONFIG_DIR=$HOME/.bitcoin
+CONFIG=$CONFIG_DIR/bitcoin.conf
+mkdir -p $CONFIG_DIR
+PASS=$(openssl rand -hex 32)
+
+cat > $CONFIG <<EOF
+server=1
+connections=40
+rpcuser=lamassu
+rpcpassword=$PASS
+keypool=10000
+prune=4000
+daemon=0
+EOF
+
+pm2 start bitcoind >> $LOG_FILE 2>&1
+pm2 save >> $LOG_FILE 2>&1
+
+BIN=$(npm -g bin)
+BACKUP_CRON="@daily $BIN/backup-bitcoind > /dev/null"
+echo $BACKUP_CRON | crontab -
+
+$BIN/lamassu-bitcoind-enable
+
+echo "Success."

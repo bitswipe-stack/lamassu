@@ -1,0 +1,74 @@
+{
+  "name": "lamassu-scripts",
+  "version": "0.2.36",
+  "author": "Lamassu (https://lamassu.is)",
+  "bin": {
+    "lamassu-passwd": "./bin/lamassu-passwd",
+    "lamassu-useradd": "./bin/lamassu-useradd",
+    "lamassu-set-locale": "./bin/lamassu-set-locale",
+    "lamassu-unpair": "./bin/lamassu-unpair",
+    "lamassu-bitcoind-backup": "./bin/lamassu-bitcoind-backup",
+    "lamassu-bitcoind-enable": "./bin/lamassu-bitcoind-enable",
+    "lamassu-classic-install": "./bin/lamassu-classic-install",
+    "lamassu-core-install": "./bin/lamassu-core-install",
+    "lamassu-geth-backup": "./bin/lamassu-geth-backup",
+    "lamassu-disable-trading": "./bin/lamassu-disable-trading",
+    "lamassu-update-config": "./bin/lamassu-update-config",
+    "lamassu-transactions-csv": "./bin/lamassu-transactions-csv",
+    "ssu-name": "./bin/ssu-name",
+    "ssu-limits": "./bin/ssu-limits",
+    "ssu-bills": "./bin/ssu-bills",
+    "ssu-cartridges": "./bin/ssu-cartridges",
+    "ssu-fix-db": "./bin/ssu-fix-db",
+    "lamassu-bills-log": "./bin/lamassu-bills-log",
+    "lamassu-dispense-log": "./bin/lamassu-dispense-log",
+    "lamassu-userdel": "./bin/lamassu-userdel",
+    "lamassu-tx-unencrypted": "./bin/lamassu-tx-unencrypted",
+    "lamassu-server-log": "./bin/lamassu-server-log",
+    "backup-pg": "./bin/backup-pg",
+    "backup-bitcoind": "./bin/backup-bitcoind",
+    "ssu-bitcoind": "./bin/ssu-bitcoind",
+    "ssu-geth": "./bin/ssu-geth",
+    "ssu-mnemonic": "./bin/ssu-mnemonic",
+    "lamassu-unlimited-install": "./bin/lamassu-unlimited-install",
+    "lamassu-bills-export": "./bin/lamassu-bills-export",
+    "lamassu-tx-export": "./bin/lamassu-tx-export",
+    "lamassu-bills-unencrypted": "./bin/lamassu-bills-unencrypted",
+    "ssu-commission": "./bin/ssu-commission",
+    "ssu-tx-cashin": "./bin/ssu-tx-cashin",
+    "ssu-tx-cashout": "./bin/ssu-tx-cashout"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "bip39": "^2.2.0",
+    "chalk": "^1.0.0",
+    "es6-promise": "^3.2.1",
+    "inquirer": "^1.0.3",
+    "lamassu-config": "lamassu/lamassu-config",
+    "lodash": "~2.4.1",
+    "minimist": "^1.1.0",
+    "moniker": "^0.1.2",
+    "pad": "0.0.5",
+    "pg": "^4.5.5",
+    "pg-promise": "^4.3.7",
+    "read": "^1.0.5",
+    "promptly": "~0.2.0"
+  },
+  "description": "lamassu-scripts",
+  "main": "bin/lamassu-bootstrap",
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha --recursive test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sethbergman/lamassu.git"
+  },
+  "keywords": [
+    "bitcoin"
+  ],
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/sethbergman/lamassu/issues"
+  }
+}

@@ -1,0 +1,102 @@
+#!/usr/bin/env node
+
+'use strict'
+
+require('es6-promise').polyfill()
+var argv = process.argv.slice(2)
+var _ = require('lodash')
+var conString = require('../lib/db')
+
+var db = require('pg-promise')({})(conString)
+var name, top, bottom, fingerprint
+
+var noArgs = argv.length === 0
+
+function usage () {
+  console.log('Reset bill counts for dispenser.')
+  console.log('Usage: ssu-bills [<machine name>] [<top count> <bottom count>]')
+  console.log('\nExample: ssu-bills fancy-horse 200 50')
+  console.log('Resets top cartridge to 200 bills, bottom cartridge to 50 bills.')
+  console.log("If you're only operating one machine, machine name is optional.\n")
+}
+
+function printConfig (counts, _name) {
+  if (!counts) return console.log('Name: %s, No bill counts are recorded for this machine yet', _name)
+  console.log('Name: %s, Top: %d, Bottom: %d', _name, counts.count1, counts.count2)
+}
+
+function bail (msg) {
+  console.log(msg)
+  process.exit(2)
+}
+
+function validateArgs () {
+  function bad (msg) { if (msg) console.log('Error: %s\n', msg); return false }
+  if (argv.length !== 2 && argv.length !== 3) return bad()
+  if (argv.length === 3) name = argv.shift()
+  top = argv.shift()
+  bottom = argv.shift()
+  function valid (arg) { return _.isNumber(parseInt(arg, 10)) && arg >= 0 }
+  if (!_.every([top, bottom], valid)) return bad('No negative values allowed')
+  return true
+}
+
+var badArgs = !validateArgs()
+if (badArgs) usage()
+
+if (noArgs) {
+  db.manyOrNone('SELECT name, fingerprint FROM devices')
+  .then(function (rows) {
+    if (rows.length === 0) bail('No machines are paired yet.')
+    var sql = 'SELECT count1, count2 FROM dispenses WHERE device_fingerprint=$1 ORDER BY id DESC limit 1'
+    var promises = rows.map(function (row) { return db.one(sql, [row.fingerprint]) })
+
+    console.log('Current counts:')
+
+    return Promise.all(promises)
+    .then(function (countRows) {
+      countRows.forEach(function (row, i) {
+        printConfig(row, rows[i].name)
+      })
+      process.exit(0)
+    })
+  })
+  .catch(function (err) {
+    console.log(err.message)
+    console.log(err.stack)
+    process.exit(3)
+  })
+} else {
+  db.manyOrNone('SELECT name, fingerprint FROM devices')
+  .then(function (rows) {
+    if (rows.length === 0) bail('No machines are paired yet.')
+    if (!name && rows.length !== 1) bail('You have multiple machines, please supply a machine name.')
+    if (!name) name = rows[0].name
+    var chosen = _.find(rows, {name: name})
+    if (!chosen) bail('No such machine: ' + name)
+    fingerprint = chosen.fingerprint
+    return db.one('SELECT count1, count2 FROM dispenses WHERE device_fingerprint=$1 ORDER BY id DESC limit 1', [fingerprint])
+  })
+  .then(function (row) {
+    console.log('\nPrevious count:')
+    printConfig(row, name)
+    if (badArgs) process.exit(5)
+
+    var insertSql = 'insert into dispenses ' +
+      '(device_fingerprint, count1, count2, refill, dispense1, reject1, dispense2, reject2) ' +
+      'values ($1, $2, $3, $4, $5, $6, $7, $8)'
+    var insertValues = [fingerprint, top, bottom, true, 0, 0, 0, 0]
+
+    return db.none(insertSql, insertValues)
+  })
+  .then(function () {
+    console.log('\nNew count:')
+    printConfig({count1: top, count2: bottom}, name)
+    process.exit(0)
+  })
+  .catch(function (err) {
+    console.log(err.message)
+    console.log(err.stack)
+    process.exit(3)
+  })
+}
