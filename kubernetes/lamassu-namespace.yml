@@ -1,0 +1,27 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: lamassu
+  labels:
+    name: lamassu
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: lamassu-staging
+  labels:
+    name: lamassu-staging
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: ingress-nginx
+  labels:
+    name: ingress-nginx
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: kube-lego
+  labels:
+    name: kube-lego

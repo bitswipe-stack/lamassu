@@ -2,7 +2,7 @@
 node_modules
 dump.rdb
 npm-debug.log
-!tmp
-!client/static/assets
+tmp
+client/static/assets
 .vscode
-!scratch/
+scratch/
